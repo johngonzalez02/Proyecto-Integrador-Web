@@ -1,1 +1,18 @@
-<p>client-events works!</p>
+<section class="events-section">
+  <div class="mb-4">
+    <h2 class="events-section__title">Próximos eventos</h2>
+    <p class="text-secondary mb-0">Descubre los eventos disponibles para ti</p>
+  </div>
+
+  <div class="row g-4">
+    @for (event of events(); track event.codigo) {
+      <app-event-card
+        [event]="event"
+        [actionLink]="'/client/create-reservation/' + event.codigo"
+        actionLabel="Reservar"
+      />
+    } @empty {
+      <p class="text-secondary">No hay eventos disponibles por ahora.</p>
+    }
+  </div>
+</section>
