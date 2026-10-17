@@ -1,0 +1,68 @@
+:host {
+  display: contents;
+}
+
+.event-card {
+  border: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  }
+
+  &__image {
+    position: relative;
+  }
+
+  &__status {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__location,
+  &__date {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+
+  &__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  &__price {
+    font-weight: 600;
+    color: #0d6efd;
+  }
+
+  &__footer {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+}
+
+.status--scheduled { background: #6c757d; }
+.status--ticket    { background: #0d6efd; }
+.status--live      { background: #198754; }
+.status--finished  { background: #343a40; }
+.status--cancelled { background: #dc3545; }
