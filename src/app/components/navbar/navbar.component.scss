@@ -54,3 +54,22 @@
     color: #fff; border-radius: 0.5rem; padding: 0.3rem 0.7rem;
   }
 }
+.app-navbar {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .navbar-navigation {
+    order: 3;
+    width: 100%;
+    flex: none;
+    overflow-x: auto;
+  }
+
+  .navbar-user-section {
+    .user-data,
+    .logout-button span {
+      display: none;
+    }
+  }
+}

@@ -27,7 +27,7 @@
           {{ event.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
         </div>
 
-        @if (actionLink) {
+        @if (actionLink && event.estado !== 'Cancelado' && event.estado !== 'Finalizado') {
           <div class="event-card__footer">
             <a [routerLink]="actionLink" class="btn btn-primary w-100">
               {{ actionLabel }}
