@@ -1,1 +1,43 @@
-<p>register works!</p>
+﻿<main class="d-flex align-items-center justify-content-center min-vh-100 bg-light p-3">
+  <div class="card shadow-sm w-100" style="max-width: 520px">
+    <div class="card-body p-4">
+      <div class="text-center mb-4">
+        <i class="bi bi-person-plus fs-1 text-primary"></i>
+        <h2 class="fw-bold mt-2">Crear cuenta</h2>
+        <p class="text-secondary">Regístrate para reservar eventos</p>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Apellido</label>
+          <input type="text" class="form-control" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">Teléfono</label>
+          <input type="tel" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Contraseña</label>
+          <input type="password" class="form-control" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Confirmar contraseña</label>
+          <input type="password" class="form-control" />
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-primary w-100">Registrarme</button>
+        </div>
+      </div>
+
+      <p class="text-center mt-3 mb-0">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </div>
+  </div>
+</main>

@@ -1,1 +1,36 @@
-<p>client-create-reservation works!</p>
+﻿<section class="row justify-content-center">
+  <div class="col-12 col-lg-8">
+    <a routerLink="/client/events" class="text-decoration-none">&larr; Volver a eventos</a>
+
+    @if (event(); as ev) {
+      <div class="card shadow-sm mt-3">
+        <div class="card-body p-4">
+          <h2 class="fw-bold">{{ ev.nombre }}</h2>
+          <p class="text-secondary">{{ ev.descripcion }}</p>
+          <ul class="list-unstyled mb-4">
+            <li><i class="bi bi-geo-alt"></i> {{ ev.teatro }} · {{ ev.ciudad }}</li>
+            <li><i class="bi bi-calendar-event"></i> {{ ev.fecha_inicio | date: "d 'de' MMMM 'de' y, h:mm a" }}</li>
+            <li><i class="bi bi-cash"></i> {{ ev.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }} por entrada</li>
+            <li><i class="bi bi-people"></i> Capacidad: {{ ev.capacidad }}</li>
+          </ul>
+
+          <div class="mb-3">
+            <label class="form-label">Número de entradas</label>
+            <input type="number" min="1" class="form-control" [value]="entradas()" (input)="setEntradas($any($event.target).value)" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control" rows="3" placeholder="Ej: sentados juntos"></textarea>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Total: {{ total() | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</h4>
+            <button type="button" class="btn btn-primary">Confirmar reserva</button>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <p class="text-secondary mt-3">Evento no encontrado.</p>
+    }
+  </div>
+</section>

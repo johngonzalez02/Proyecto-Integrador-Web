@@ -1,4 +1,71 @@
-<app-navbar />
+﻿<app-navbar />
 <main class="container py-4">
-  <h2>Reportes</h2>
+  <h2 class="fw-bold">Reportes del sistema</h2>
+  <p class="text-secondary">Resumen general de eventos y reservas</p>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <small class="text-secondary">Eventos</small>
+        <h3 class="fw-bold mb-0">{{ events().length }}</h3>
+      </div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <small class="text-secondary">Reservas</small>
+        <h3 class="fw-bold mb-0">{{ reservations().length }}</h3>
+      </div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <small class="text-secondary">Confirmadas</small>
+        <h3 class="fw-bold mb-0">{{ count('Confirmada') }}</h3>
+      </div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <small class="text-secondary">Ingresos confirmados</small>
+        <h3 class="fw-bold mb-0">{{ ingresos | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</h3>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h5 class="fw-bold mb-3">Reservas por estado</h5>
+        @for (s of states; track s) {
+          <div class="mb-3">
+            <div class="d-flex justify-content-between small">
+              <span>{{ s }}</span><span>{{ count(s) }} ({{ percent(s) }}%)</span>
+            </div>
+            <div class="progress" style="height: 14px">
+              <div class="progress-bar {{ colors[s] }}" [style.width.%]="percent(s)"></div>
+            </div>
+          </div>
+        }
+      </div></div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h5 class="fw-bold mb-3">Eventos</h5>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle mb-0">
+            <thead><tr><th>Evento</th><th>Ciudad</th><th>Capacidad</th><th>Estado</th></tr></thead>
+            <tbody>
+              @for (e of events(); track e.codigo) {
+                <tr>
+                  <td>{{ e.nombre }}</td>
+                  <td>{{ e.ciudad }}</td>
+                  <td>{{ e.capacidad }}</td>
+                  <td><span class="badge text-bg-secondary">{{ e.estado }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </div>
+  </div>
 </main>

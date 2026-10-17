@@ -1,1 +1,34 @@
-<p>agent-reservations works!</p>
+﻿<section>
+  <h2 class="fw-bold">Administrar reservas</h2>
+  <p class="text-secondary">Revisa las reservas solicitadas y actualiza su estado</p>
+
+  <div class="table-responsive card shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Código</th><th>Cliente</th><th>Evento</th><th>Fecha</th><th>Entradas</th><th>Total</th><th>Estado</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of reservations(); track r.codigo) {
+          <tr>
+            <td>#{{ r.codigo }}</td>
+            <td>{{ r.cliente.nombre }} {{ r.cliente.apellido }}</td>
+            <td>{{ r.evento.nombre }}</td>
+            <td>{{ r.fecha | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ r.entradas }}</td>
+            <td>{{ r.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+            <td>
+              <select class="form-select form-select-sm">
+                @for (s of states; track s) {
+                  <option [selected]="s === r.estado">{{ s }}</option>
+                }
+              </select>
+            </td>
+            <td><button type="button" class="btn btn-sm btn-outline-primary">Actualizar</button></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
