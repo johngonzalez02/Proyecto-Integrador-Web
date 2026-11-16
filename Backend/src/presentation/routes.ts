@@ -1,7 +1,5 @@
-﻿import { Router } from "express";
-import { ExampleRoutes } from "./modules/example/example.routes";
-import { EventsRoutes } from "./modules/events/events.routes";
-import { ReservationsRoutes } from "./modules/reservations/reservations.routes";
+import { Router } from "express";
+import { LocationRoutes } from "./modules/location/location.routes";
 
 export class AppRoutes {
 
@@ -10,9 +8,7 @@ export class AppRoutes {
     const apiRouter = Router();
 
     // Definir rutas
-    apiRouter.use("/example", ExampleRoutes.routes);
-    apiRouter.use("/events", EventsRoutes.routes);
-    apiRouter.use("/reservations", ReservationsRoutes.routes);
+    apiRouter.use("/", LocationRoutes.routes);
 
     router.use("/api", apiRouter);
 

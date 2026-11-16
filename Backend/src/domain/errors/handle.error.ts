@@ -3,45 +3,31 @@ import { CustomError } from "./custom.error";
 
 /**
  * Manejador centralizado de errores HTTP.
- *
- * @remarks
- * Esta clase se encarga de procesar errores lanzados durante
- * la ejecución de la aplicación y de enviar una respuesta HTTP
- * estandarizada al cliente.
- *
- * Soporta errores personalizados (`CustomError`) y errores
- * genéricos no controlados.
+ * Procesa errores personalizados, errores de PostgreSQL y errores no controlados.
  */
 export class HandleError {
 
-  /**
-   * Procesa un error y envía la respuesta HTTP correspondiente.
-   *
-   * @param error Error capturado durante la ejecución
-   * @param res Objeto de respuesta de Express
-   *
-   * @returns Respuesta HTTP con el código de estado y mensaje apropiado
-   *
-   * @example
-   * ```ts
-   * try {
-   *   ...
-   * } catch (error) {
-   *   HandleError.error(error, res);
-   * }
-   * ```
-   */
   static error(error: unknown, res: Response) {
     console.log(`${error}`);
 
     if (error instanceof CustomError) {
-      return res
-        .status(error.statusCode)
-        .json({ error: error.message });
+      return res.status(error.statusCode).json({ error: error.message });
     }
 
-    return res
-      .status(500)
-      .json({ error: 'Internal Server error' });
+    const code = (error as { code?: string } | null)?.code;
+
+    switch (code) {
+      case "23505":
+        return res.status(409).json({ error: "Ya existe un registro con esos datos únicos" });
+      case "23503":
+        return res.status(409).json({ error: "La operación viola una relación: el registro referenciado no existe o tiene registros asociados" });
+      case "23502":
+      case "23514":
+      case "22P02":
+      case "22007":
+        return res.status(400).json({ error: "Los datos enviados no son válidos" });
+    }
+
+    return res.status(500).json({ error: "Internal Server error" });
   }
 }
