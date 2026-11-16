@@ -1,60 +1,88 @@
--- Tabla de estudiantes
-CREATE TABLE IF NOT EXISTS students_example (
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Ubicación geográfica
+CREATE TABLE IF NOT EXISTS countries (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS departments (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    correo VARCHAR(150) UNIQUE NOT NULL
+    country_id INTEGER NOT NULL REFERENCES countries(id) ON DELETE CASCADE
 );
 
--- Tabla de cursos
-CREATE TABLE IF NOT EXISTS courses_example (
+CREATE TABLE IF NOT EXISTS cities (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    creditos INTEGER NOT NULL CHECK (creditos > 0)
+    department_id INTEGER NOT NULL REFERENCES departments(id) ON DELETE CASCADE
 );
 
--- Tabla intermedia para la relación N:M
-CREATE TABLE IF NOT EXISTS enrollments_example (
+-- Personas
+CREATE TABLE IF NOT EXISTS persons (
     id SERIAL PRIMARY KEY,
-    estudiante_id INTEGER NOT NULL REFERENCES students_example(id) ON DELETE CASCADE,
-    curso_id INTEGER NOT NULL REFERENCES courses_example(id) ON DELETE CASCADE,
-    fecha_matricula DATE NOT NULL DEFAULT CURRENT_DATE,
-    nota_final NUMERIC(3, 1) CHECK (nota_final BETWEEN 0 AND 5),
-    UNIQUE (estudiante_id, curso_id)
+    identificacion VARCHAR(20) UNIQUE NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
+    correo VARCHAR(150) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    direccion VARCHAR(200) NOT NULL,
+    city_id INTEGER NOT NULL REFERENCES cities(id)
 );
 
--- Tabla de teatros
-CREATE TABLE IF NOT EXISTS venues (
+CREATE TABLE IF NOT EXISTS person_phones (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    ciudad VARCHAR(80) NOT NULL,
-    capacidad INTEGER NOT NULL CHECK (capacidad > 0)
+    person_id INTEGER NOT NULL REFERENCES persons(id) ON DELETE CASCADE,
+    telefono VARCHAR(20) NOT NULL
 );
 
--- Tabla de eventos
+-- Perfiles (comparten clave con persons)
+CREATE TABLE IF NOT EXISTS clients (
+    person_id INTEGER PRIMARY KEY REFERENCES persons(id) ON DELETE CASCADE,
+    puntos INTEGER NOT NULL DEFAULT 0 CHECK (puntos >= 0),
+    publicidad BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS agents (
+    person_id INTEGER PRIMARY KEY REFERENCES persons(id) ON DELETE CASCADE,
+    comision INTEGER NOT NULL CHECK (comision BETWEEN 0 AND 100),
+    experiencia INTEGER NOT NULL CHECK (experiencia >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS admins (
+    person_id INTEGER PRIMARY KEY REFERENCES persons(id) ON DELETE CASCADE,
+    salario INTEGER NOT NULL CHECK (salario >= 0),
+    horario VARCHAR(100) NOT NULL
+);
+
+-- Eventos
 CREATE TABLE IF NOT EXISTS events (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
-    descripcion TEXT,
-    venue_id INTEGER NOT NULL REFERENCES venues(id) ON DELETE CASCADE,
+    descripcion TEXT NOT NULL,
+    teatro VARCHAR(120) NOT NULL,
+    city_id INTEGER NOT NULL REFERENCES cities(id),
+    agent_id INTEGER NOT NULL REFERENCES agents(person_id) ON DELETE CASCADE,
     fecha_inicio TIMESTAMP NOT NULL,
+    fecha_fin TIMESTAMP NOT NULL,
+    capacidad INTEGER NOT NULL CHECK (capacidad > 0),
     precio INTEGER NOT NULL CHECK (precio >= 0),
-    estado VARCHAR(20) NOT NULL
+    observaciones TEXT,
+    estado VARCHAR(20) NOT NULL DEFAULT 'Programado'
+        CHECK (estado IN ('Programado', 'En Boleteria', 'En Vivo', 'Finalizado', 'Cancelado')),
+    causa_cancelacion TEXT,
+    CHECK (fecha_fin > fecha_inicio)
 );
 
--- Tabla de clientes
-CREATE TABLE IF NOT EXISTS customers (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    correo VARCHAR(120) UNIQUE NOT NULL
-);
-
--- Tabla de reservas
+-- Reservas
 CREATE TABLE IF NOT EXISTS reservations (
     id SERIAL PRIMARY KEY,
-    customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+    client_id INTEGER NOT NULL REFERENCES clients(person_id) ON DELETE CASCADE,
     event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
     fecha TIMESTAMP NOT NULL DEFAULT NOW(),
-    entradas INTEGER NOT NULL CHECK (entradas > 0),
     total INTEGER NOT NULL CHECK (total >= 0),
-    estado VARCHAR(20) NOT NULL
+    entradas INTEGER NOT NULL CHECK (entradas > 0),
+    observaciones TEXT,
+    estado VARCHAR(20) NOT NULL DEFAULT 'Reservada'
+        CHECK (estado IN ('Reservada', 'Confirmada', 'Cancelada')),
+    causa_cancelacion TEXT
 );
