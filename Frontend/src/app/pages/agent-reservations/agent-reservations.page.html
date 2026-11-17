@@ -1,34 +1,48 @@
-﻿<section>
+<section>
   <h2 class="fw-bold">Administrar reservas</h2>
-  <p class="text-secondary">Revisa las reservas solicitadas y actualiza su estado</p>
+  <p class="text-secondary">Reservas solicitadas para tus eventos. Actualiza su estado</p>
 
-  <div class="table-responsive card shadow-sm">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Código</th><th>Cliente</th><th>Evento</th><th>Fecha</th><th>Entradas</th><th>Total</th><th>Estado</th><th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (r of reservations(); track r.codigo) {
+  @if (error()) {
+    <div class="alert alert-danger">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+  } @else {
+    <div class="table-responsive card shadow-sm">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
           <tr>
-            <td>#{{ r.codigo }}</td>
-            <td>{{ r.cliente.nombre }} {{ r.cliente.apellido }}</td>
-            <td>{{ r.evento.nombre }}</td>
-            <td>{{ r.fecha | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ r.entradas }}</td>
-            <td>{{ r.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
-            <td>
-              <select class="form-select form-select-sm">
-                @for (s of states; track s) {
-                  <option [selected]="s === r.estado">{{ s }}</option>
-                }
-              </select>
-            </td>
-            <td><button type="button" class="btn btn-sm btn-outline-primary">Actualizar</button></td>
+            <th>Código</th><th>Cliente</th><th>Evento</th><th>Fecha</th><th>Entradas</th><th>Total</th><th>Estado</th><th></th>
           </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          @for (r of rows; track r.id) {
+            <tr>
+              <td>#{{ r.id }}</td>
+              <td>{{ r.cliente }}<br /><small class="text-secondary">{{ r.correo }}</small></td>
+              <td>{{ r.evento }}</td>
+              <td>{{ r.fecha | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.entradas }}</td>
+              <td>{{ r.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+              <td>
+                <span class="badge {{ badge(r.estado) }} mb-1">{{ r.estado }}</span>
+                <select class="form-select form-select-sm" [name]="'estado-' + r.id" [(ngModel)]="r.nuevoEstado">
+                  @for (s of states; track s) {
+                    <option [value]="s">{{ s }}</option>
+                  }
+                </select>
+              </td>
+              <td class="text-nowrap">
+                <button type="button" class="btn btn-sm btn-outline-primary me-1" (click)="update(r)">Actualizar</button>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="remove(r)">Eliminar</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="text-center text-secondary py-4">No hay reservas para tus eventos.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </section>

@@ -1,51 +1,80 @@
-﻿<section class="row justify-content-center">
+<section class="row justify-content-center">
   <div class="col-12 col-lg-8">
-    <h2 class="fw-bold">Registrar evento</h2>
-    <p class="text-secondary">Completa la información del nuevo evento</p>
+    <a routerLink="/agent/events" class="text-decoration-none">&larr; Volver a mis eventos</a>
+
+    <h2 class="fw-bold mt-3">{{ eventId ? 'Editar evento' : 'Registrar evento' }}</h2>
+    <p class="text-secondary">Completa la información del evento</p>
+
+    @if (error()) {
+      <div class="alert alert-danger py-2">{{ error() }}</div>
+    }
 
     <div class="card shadow-sm">
       <div class="card-body p-4">
-        <div class="row g-3">
-          <div class="col-12">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" placeholder="Nombre del evento" />
+        <form (ngSubmit)="submit()">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="nombre">Nombre</label>
+              <input id="nombre" name="nombre" type="text" class="form-control" [(ngModel)]="form.nombre" />
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="descripcion">Descripción</label>
+              <textarea id="descripcion" name="descripcion" class="form-control" rows="3" [(ngModel)]="form.descripcion"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="teatro">Teatro / Lugar</label>
+              <input id="teatro" name="teatro" type="text" class="form-control" [(ngModel)]="form.teatro" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="city_id">Ciudad</label>
+              <select id="city_id" name="city_id" class="form-select" [(ngModel)]="form.city_id">
+                <option [ngValue]="null" disabled>Selecciona una ciudad</option>
+                @for (c of cities(); track c.id) {
+                  <option [ngValue]="c.id">{{ c.nombre }} - {{ c.department }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="fecha_inicio">Fecha y hora de inicio</label>
+              <input id="fecha_inicio" name="fecha_inicio" type="datetime-local" class="form-control" [(ngModel)]="form.fecha_inicio" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="fecha_fin">Fecha y hora de fin</label>
+              <input id="fecha_fin" name="fecha_fin" type="datetime-local" class="form-control" [(ngModel)]="form.fecha_fin" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="capacidad">Capacidad</label>
+              <input id="capacidad" name="capacidad" type="number" min="1" class="form-control" [(ngModel)]="form.capacidad" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="precio">Precio base (COP)</label>
+              <input id="precio" name="precio" type="number" min="0" class="form-control" [(ngModel)]="form.precio" />
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="estado">Estado</label>
+              <select id="estado" name="estado" class="form-select" [(ngModel)]="form.estado">
+                @for (s of states; track s) {
+                  <option [value]="s">{{ s }}</option>
+                }
+              </select>
+            </div>
+            @if (form.estado === 'Cancelado') {
+              <div class="col-12">
+                <label class="form-label" for="causa">Causa de la cancelación</label>
+                <textarea id="causa" name="causa" class="form-control" rows="2" [(ngModel)]="form.causa_cancelacion"></textarea>
+              </div>
+            }
+            <div class="col-12">
+              <label class="form-label" for="observaciones">Observaciones</label>
+              <textarea id="observaciones" name="observaciones" class="form-control" rows="2" [(ngModel)]="form.observaciones"></textarea>
+            </div>
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-primary" [disabled]="saving()">
+                @if (saving()) { Guardando... } @else { {{ eventId ? 'Guardar cambios' : 'Registrar evento' }} }
+              </button>
+            </div>
           </div>
-          <div class="col-12">
-            <label class="form-label">Descripción</label>
-            <textarea class="form-control" rows="3"></textarea>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Teatro / Lugar</label>
-            <input type="text" class="form-control" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Ciudad</label>
-            <input type="text" class="form-control" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Fecha de inicio</label>
-            <input type="datetime-local" class="form-control" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Fecha de fin</label>
-            <input type="datetime-local" class="form-control" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Capacidad</label>
-            <input type="number" min="1" class="form-control" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Precio (COP)</label>
-            <input type="number" min="0" class="form-control" />
-          </div>
-          <div class="col-12">
-            <label class="form-label">Observaciones</label>
-            <textarea class="form-control" rows="2"></textarea>
-          </div>
-          <div class="col-12 text-end">
-            <button type="button" class="btn btn-primary">Registrar evento</button>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>

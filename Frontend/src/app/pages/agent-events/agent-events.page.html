@@ -1,32 +1,51 @@
-﻿<section>
+<section>
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
-      <h2 class="fw-bold mb-0">Eventos registrados</h2>
-      <p class="text-secondary mb-0">Todos los eventos del sistema</p>
+      <h2 class="fw-bold mb-0">Mis eventos</h2>
+      <p class="text-secondary mb-0">Eventos registrados por ti</p>
     </div>
     <a routerLink="/agent/create-event" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Crear evento</a>
   </div>
 
-  <div class="table-responsive card shadow-sm">
-    <table class="table table-hover align-middle mb-0">
-      <thead class="table-light">
-        <tr>
-          <th>Código</th><th>Nombre</th><th>Lugar</th><th>Fecha</th><th>Capacidad</th><th>Precio</th><th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (e of events(); track e.codigo) {
+  @if (error()) {
+    <div class="alert alert-danger">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+  } @else {
+    <div class="table-responsive card shadow-sm">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
           <tr>
-            <td>{{ e.codigo }}</td>
-            <td>{{ e.nombre }}</td>
-            <td>{{ e.teatro }} · {{ e.ciudad }}</td>
-            <td>{{ e.fecha_inicio | date: 'dd/MM/yyyy h:mm a' }}</td>
-            <td>{{ e.capacidad }}</td>
-            <td>{{ e.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
-            <td><span class="badge text-bg-secondary">{{ e.estado }}</span></td>
+            <th>Código</th><th>Nombre</th><th>Lugar</th><th>Fecha</th><th>Reservadas</th><th>Precio</th><th>Estado</th><th></th>
           </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          @for (e of events(); track e.id) {
+            <tr>
+              <td>{{ e.id }}</td>
+              <td>{{ e.nombre }}</td>
+              <td>{{ e.teatro }} · {{ e.city }}</td>
+              <td>{{ e.fecha_inicio | date: 'dd/MM/yyyy h:mm a' }}</td>
+              <td>{{ e.reservadas }} / {{ e.capacidad }}</td>
+              <td>{{ e.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</td>
+              <td>
+                <span class="badge {{ badge(e.estado) }}">{{ e.estado }}</span>
+                @if (e.causa_cancelacion) {
+                  <br /><small class="text-secondary">{{ e.causa_cancelacion }}</small>
+                }
+              </td>
+              <td class="text-nowrap">
+                <a [routerLink]="'/agent/edit-event/' + e.id" class="btn btn-sm btn-outline-primary me-1">Editar</a>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="remove(e)">Eliminar</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="text-center text-secondary py-4">Aún no has registrado eventos.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </section>
