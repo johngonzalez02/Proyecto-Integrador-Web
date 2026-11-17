@@ -1,5 +1,5 @@
 :host {
-  display: contents;
+  display: block;
 }
 
 .event-card {
@@ -14,8 +14,29 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
   }
 
-  &__image {
+  &__banner {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 8;
+    padding: 2.5rem 1.5rem 1.5rem;
+    text-align: center;
+    color: #fff;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   &__status {
@@ -33,21 +54,16 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    padding: 1.25rem;
   }
 
   &__location,
   &__date {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
     color: #6c757d;
     font-size: 0.875rem;
-  }
-
-  &__title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin: 0;
   }
 
   &__price {
@@ -57,11 +73,11 @@
 
   &__footer {
     margin-top: auto;
-    padding-top: 0.5rem;
+    padding-top: 0.75rem;
   }
 }
 
-.status--scheduled { background: #6c757d; }
+.status--scheduled { background: rgba(33, 37, 41, 0.55); }
 .status--ticket    { background: #0d6efd; }
 .status--live      { background: #198754; }
 .status--finished  { background: #343a40; }

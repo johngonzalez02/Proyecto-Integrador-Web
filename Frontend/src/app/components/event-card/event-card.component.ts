@@ -22,7 +22,21 @@ export class EventCardComponent {
     'Cancelado': 'status--cancelled',
   };
 
+  private gradients = [
+    'linear-gradient(135deg, #0d6efd, #6610f2)',
+    'linear-gradient(135deg, #198754, #20c997)',
+    'linear-gradient(135deg, #fd7e14, #dc3545)',
+    'linear-gradient(135deg, #6f42c1, #d63384)',
+    'linear-gradient(135deg, #0aa2c0, #0d6efd)',
+    'linear-gradient(135deg, #343a40, #6c757d)',
+  ];
+
   get statusClass(): string {
     return this.event ? this.statusClasses[this.event.estado] : '';
+  }
+
+  /** Cada evento conserva siempre el mismo color, según su id. */
+  get banner(): string {
+    return this.event ? this.gradients[this.event.id % this.gradients.length] : '';
   }
 }

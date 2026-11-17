@@ -1,3 +1,37 @@
-.events-section__title {
-  font-weight: 700;
+$gap: 1.5rem;
+
+.events-section {
+  &__header {
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.events-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+
+  // 1 columna en móvil
+  app-event-card {
+    flex: 1 1 100%;
+  }
+
+  // 2 columnas en tablet
+  @media (min-width: 768px) {
+    app-event-card {
+      flex: 0 1 calc((100% - #{$gap}) / 2);
+    }
+  }
+
+  // 3 columnas en escritorio
+  @media (min-width: 992px) {
+    app-event-card {
+      flex: 0 1 calc((100% - #{$gap * 2}) / 3);
+    }
+  }
 }

@@ -1,5 +1,5 @@
 <section class="events-section">
-  <div class="mb-4">
+  <div class="events-section__header">
     <h2 class="events-section__title">Próximos eventos</h2>
     <p class="text-secondary mb-0">Descubre los eventos disponibles para ti</p>
   </div>
@@ -9,7 +9,7 @@
   } @else if (error()) {
     <div class="alert alert-danger">{{ error() }}</div>
   } @else {
-    <div class="row g-4">
+    <div class="events-list">
       @for (event of events(); track event.id) {
         <app-event-card
           [event]="event"
