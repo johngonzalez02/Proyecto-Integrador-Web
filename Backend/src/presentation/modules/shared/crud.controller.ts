@@ -3,7 +3,7 @@ import { HandleError } from "../../../domain/errors/handle.error";
 import { Validators } from "../../../domain/utils/validators";
 
 export interface CrudService {
-  getAll(): Promise<unknown[]>;
+  getAll(query?: Record<string, unknown>): Promise<unknown[]>;
   getById(id: number): Promise<unknown>;
   create(body: Record<string, unknown>): Promise<unknown>;
   update(id: number, body: Record<string, unknown>): Promise<unknown>;
@@ -20,7 +20,7 @@ export class CrudController {
 
   getAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      res.status(200).json(await this.service.getAll());
+      res.status(200).json(await this.service.getAll(req.query as Record<string, unknown>));
     } catch (error) {
       HandleError.error(error, res);
     }
