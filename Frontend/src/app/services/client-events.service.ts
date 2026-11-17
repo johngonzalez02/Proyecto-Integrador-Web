@@ -1,15 +1,18 @@
-﻿import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Event } from '../interfaces/event.interface';
-import { EVENTS_MOCK } from '../mocks/events.mock';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { API_URL } from '../config/api.config';
+import { EventItem } from '../interfaces/event.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ClientEventsService {
-  getEvents(): Observable<Event[]> {
-    return of(EVENTS_MOCK);
+  private http = inject(HttpClient);
+
+  getEvents(): Observable<EventItem[]> {
+    return this.http.get<EventItem[]>(`${API_URL}/events`);
   }
 
-  getEventById(codigo: number): Observable<Event | undefined> {
-    return of(EVENTS_MOCK.find((e) => e.codigo === codigo));
+  getEventById(id: number): Observable<EventItem> {
+    return this.http.get<EventItem>(`${API_URL}/events/${id}`);
   }
 }

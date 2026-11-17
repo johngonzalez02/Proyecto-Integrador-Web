@@ -1,15 +1,22 @@
-﻿import { Event } from './event.interface';
-import { User } from './user.interface';
+export type ReservationState = 'Reservada' | 'Confirmada' | 'Cancelada';
 
-export interface Reservation {
-  codigo: number;
-  fecha: Date;
+export const RESERVATION_STATES: ReservationState[] = ['Reservada', 'Confirmada', 'Cancelada'];
+
+export interface ReservationItem {
+  id: number;
+  fecha: string;
   total: number;
   entradas: number;
-  observaciones: string;
+  observaciones: string | null;
   estado: ReservationState;
-  evento: Event;
-  cliente: User;
+  causa_cancelacion: string | null;
+  client_id: number;
+  cliente: string;
+  correo: string;
+  event_id: number;
+  evento: string;
+  teatro: string;
+  ciudad: string;
+  fecha_inicio: string;
+  precio: number;
 }
-
-export type ReservationState = 'Reservada' | 'Confirmada' | 'Cancelada';
