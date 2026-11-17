@@ -4,15 +4,21 @@
     <p class="text-secondary mb-0">Descubre los eventos disponibles para ti</p>
   </div>
 
-  <div class="row g-4">
-    @for (event of events(); track event.codigo) {
-      <app-event-card
-        [event]="event"
-        [actionLink]="'/client/create-reservation/' + event.codigo"
-        actionLabel="Reservar"
-      />
-    } @empty {
-      <p class="text-secondary">No hay eventos disponibles por ahora.</p>
-    }
-  </div>
+  @if (loading()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>
+  } @else if (error()) {
+    <div class="alert alert-danger">{{ error() }}</div>
+  } @else {
+    <div class="row g-4">
+      @for (event of events(); track event.id) {
+        <app-event-card
+          [event]="event"
+          [actionLink]="'/client/create-reservation/' + event.id"
+          actionLabel="Reservar"
+        />
+      } @empty {
+        <p class="text-secondary">No hay eventos disponibles por ahora.</p>
+      }
+    </div>
+  }
 </section>
