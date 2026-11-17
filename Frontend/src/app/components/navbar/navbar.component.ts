@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { UserRole } from '../../interfaces/user.interface';
 import { UserService } from '../../services/user.service';
 
 interface NavbarConfig {
@@ -9,8 +9,6 @@ interface NavbarConfig {
   icon: string;
 }
 
-type Role = 'client' | 'agent' | 'admin';
-
 @Component({
   selector: 'app-navbar',
   imports: [RouterLink, RouterLinkActive],
@@ -18,10 +16,11 @@ type Role = 'client' | 'agent' | 'admin';
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
-  private router = inject(Router);
   private userService = inject(UserService);
 
-  private configByRole: Record<Role, NavbarConfig[]> = {
+  user = this.userService.currentUser;
+
+  private configByRole: Record<UserRole, NavbarConfig[]> = {
     client: [
       { url: '/client/events', label: 'Eventos', icon: 'calendar-event' },
       { url: '/client/reservations', label: 'Mis reservas', icon: 'ticket-perforated' },
@@ -34,26 +33,34 @@ export class NavbarComponent {
     admin: [{ url: '/admin', label: 'Reportes', icon: 'bar-chart-line' }],
   };
 
-  private roleLabels: Record<Role, string> = {
+  private roleLabels: Record<UserRole, string> = {
     client: 'Cliente',
     agent: 'Agente',
     admin: 'Administrador',
   };
 
-  role: Role = this.getRole();
-  navbarConfig: NavbarConfig[] = this.configByRole[this.role];
-  roleLabel = this.roleLabels[this.role];
-  user = toSignal(this.userService.getUserByRole(this.role));
-
-  get initials(): string {
-    const u = this.user();
-    return u ? `${u.nombre[0]}${u.apellido[0]}` : '';
+  get role(): UserRole {
+    return this.user()?.rol ?? 'client';
   }
 
-  getRole(): Role {
-    const url = this.router.url;
-    if (url.includes('/agent')) return 'agent';
-    if (url.includes('/admin')) return 'admin';
-    return 'client';
+  get navbarConfig(): NavbarConfig[] {
+    return this.configByRole[this.role];
+  }
+
+  get roleLabel(): string {
+    return this.roleLabels[this.role];
+  }
+
+  get home(): string {
+    return this.userService.homeFor(this.user()?.rol ?? null);
+  }
+
+  get initials(): string {
+    const name = this.user()?.nombre ?? '';
+    return name.split(' ').filter(Boolean).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+  }
+
+  logout(): void {
+    this.userService.logout();
   }
 }

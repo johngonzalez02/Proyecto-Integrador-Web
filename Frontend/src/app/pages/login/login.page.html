@@ -1,4 +1,4 @@
-﻿<main class="auth-wrapper d-flex align-items-center justify-content-center min-vh-100 bg-light p-3">
+<main class="d-flex align-items-center justify-content-center min-vh-100 bg-light p-3">
   <div class="card shadow-sm w-100" style="max-width: 420px">
     <div class="card-body p-4">
       <div class="text-center mb-4">
@@ -7,26 +7,33 @@
         <p class="text-secondary">Inicia sesión para continuar</p>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Correo electrónico</label>
-        <input type="email" class="form-control" placeholder="correo@ejemplo.com" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Contraseña</label>
-        <input type="password" class="form-control" placeholder="••••••••" />
-      </div>
+      @if (error()) {
+        <div class="alert alert-danger py-2">{{ error() }}</div>
+      }
 
-      <button type="button" class="btn btn-primary w-100 mb-3">Iniciar sesión</button>
+      <form (ngSubmit)="submit()">
+        <div class="mb-3">
+          <label class="form-label" for="correo">Correo electrónico</label>
+          <input id="correo" name="correo" type="email" class="form-control" [(ngModel)]="correo" placeholder="correo@ejemplo.com" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="password">Contraseña</label>
+          <input id="password" name="password" type="password" class="form-control" [(ngModel)]="password" placeholder="••••••••" />
+        </div>
+        <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="loading()">
+          @if (loading()) { Ingresando... } @else { Iniciar sesión }
+        </button>
+      </form>
 
       <p class="text-center mb-3">¿No tienes cuenta? <a routerLink="/register">Regístrate</a></p>
 
       <hr />
-      <p class="text-center text-secondary small mb-2">Acceso rápido (demo)</p>
-      <div class="d-flex gap-2">
-        <a routerLink="/client" class="btn btn-outline-secondary btn-sm flex-fill">Cliente</a>
-        <a routerLink="/agent" class="btn btn-outline-secondary btn-sm flex-fill">Agente</a>
-        <a routerLink="/admin" class="btn btn-outline-secondary btn-sm flex-fill">Admin</a>
-      </div>
+      <p class="text-center text-secondary small mb-1">Usuarios de prueba (contraseña 123456)</p>
+      <ul class="small text-secondary mb-0">
+        <li>Cliente: stiven.gonzalez@correo.com</li>
+        <li>Agente: maria.lopez@correo.com</li>
+        <li>Administrador: carlos.ramirez@correo.com</li>
+      </ul>
     </div>
   </div>
 </main>

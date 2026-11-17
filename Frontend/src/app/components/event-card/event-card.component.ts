@@ -1,7 +1,7 @@
-import { DatePipe, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Event, EventState } from '../../interfaces/event.interface';
+import { EventItem, EventState } from '../../interfaces/event.interface';
 
 @Component({
   selector: 'app-event-card',
@@ -10,7 +10,7 @@ import { Event, EventState } from '../../interfaces/event.interface';
   styleUrl: './event-card.component.scss',
 })
 export class EventCardComponent {
-  @Input() event: Event | null = null;
+  @Input() event: EventItem | null = null;
   @Input() actionLabel = 'Ver evento';
   @Input() actionLink: string | null = null;
 

@@ -13,7 +13,7 @@
       <div class="card-body event-card__body">
         <div class="event-card__location">
           <i class="bi bi-geo-alt"></i>
-          <span>{{ event.teatro }} · {{ event.ciudad }}</span>
+          <span>{{ event.teatro }} · {{ event.city }}</span>
         </div>
 
         <h3 class="event-card__title">{{ event.nombre }}</h3>
@@ -26,12 +26,11 @@
         <div class="event-card__price">
           {{ event.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
         </div>
+        <small class="text-secondary">{{ event.disponibles }} entradas disponibles</small>
 
-        @if (actionLink && event.estado !== 'Cancelado' && event.estado !== 'Finalizado') {
+        @if (actionLink && event.estado !== 'Cancelado' && event.estado !== 'Finalizado' && event.disponibles > 0) {
           <div class="event-card__footer">
-            <a [routerLink]="actionLink" class="btn btn-primary w-100">
-              {{ actionLabel }}
-            </a>
+            <a [routerLink]="actionLink" class="btn btn-primary w-100">{{ actionLabel }}</a>
           </div>
         }
       </div>

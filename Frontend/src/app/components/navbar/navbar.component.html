@@ -1,6 +1,7 @@
 <nav class="app-navbar">
+
   <div class="navbar-brand-section">
-    <a routerLink="/" class="navbar-brand">
+    <a [routerLink]="home" class="navbar-brand">
       <div class="brand-icon"><i class="bi bi-calendar-event"></i></div>
       <span class="brand-name">EventApp</span>
     </a>
@@ -17,15 +18,16 @@
 
   <div class="navbar-user-section">
     <div class="user-info">
-  <div class="user-avatar">{{ initials }}</div>
-  <div class="user-data">
-    <span class="user-name">{{ user()?.nombre }} {{ user()?.apellido }}</span>
-    <span class="user-role">{{ roleLabel }}</span>
-  </div>
-</div>
-    <button type="button" class="logout-button" routerLink="/login">
+      <div class="user-avatar">{{ initials }}</div>
+      <div class="user-data">
+        <span class="user-name">{{ user()?.nombre }}</span>
+        <span class="user-role">{{ roleLabel }}</span>
+      </div>
+    </div>
+    <button type="button" class="logout-button" (click)="logout()">
       <i class="bi bi-box-arrow-right"></i>
       <span>Cerrar sesión</span>
     </button>
   </div>
+
 </nav>
